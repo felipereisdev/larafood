@@ -46,4 +46,13 @@ class PlansController extends Controller
 
         return view('admin.plans.show', compact('plan'));
     }
+
+    public function destroy(string $url): RedirectResponse
+    {
+        $plan = $this->planRepository->where('url', $url)->firstOrFail();
+
+        $plan->delete();
+
+        return redirect()->route('admin.plans.index');
+    }
 }

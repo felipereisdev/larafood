@@ -13,7 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-
+            #Filters
         </div>
         <div class="card-body">
             <table class="table table-condensed">
@@ -29,8 +29,16 @@
                         <tr>
                             <td>{{ $plan->name }}</td>
                             <td>€{{ number_format($plan->price, 2, ',', '.') }}</td>
-                            <td>
-                                <a href="{{ route('admin.plans.show', $plan->url) }}" class="btn btn-info">View</a>
+                            <td style="width: 10%">
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ route('admin.plans.show', $plan->url) }}" class="btn btn-info">View</a>
+
+                                    <form action="{{ route('admin.plans.destroy', $plan->url) }}" class="ml-1" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
