@@ -13,7 +13,10 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            #Filters
+            <form action="{{ route('admin.plans.search') }}" class="form form-inline" method="GET">
+                <input name="filter" placeholder="Name" class="form-control col-md-2" value="{{ $filters['filter'] ?? '' }}" />
+                <button type="submit" class="btn btn-dark ml-1">Search</button>
+            </form>
         </div>
         <div class="card-body">
             <table class="table table-condensed">
@@ -47,7 +50,11 @@
         </div>
         @if (!empty($plans->hasPages()))
             <div class="card-footer">
-                {{ $plans->links() }}
+                @if (!empty($filters))
+                    {{ $plans->appends($filters)->links() }}
+                @else
+                    {{ $plans->links() }}
+                @endif
             </div>
         @endif
     </div>

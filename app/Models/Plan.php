@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Plan extends Model
+class Plan extends CustomModel
 {
     protected $guarded = ['id'];
 }

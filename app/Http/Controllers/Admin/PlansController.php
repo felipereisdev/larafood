@@ -4,24 +4,30 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class PlansController extends Controller
 {
-    private Model $planRepository;
+    private Plan $planRepository;
 
     public function __construct(Plan $plan)
     {
         $this->planRepository = $plan;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->get('filter')) {
+            $plans = $this->planRepository->search($request->get('filter'), 'name');
+        } else {
+            $plans = $this->planRepository->paginate(1);
+        }
+
         return view('admin.plans.index', [
-            'plans' => $this->planRepository->paginate()
+            'plans' => $plans,
+            'filters' => ['filter' => $request->get('filter')]
         ]);
     }
 
