@@ -22,7 +22,7 @@ class PlansController extends Controller
         if ($request->get('filter')) {
             $plans = $this->planRepository->search($request->get('filter'), 'name');
         } else {
-            $plans = $this->planRepository->paginate(1);
+            $plans = $this->planRepository->paginate();
         }
 
         return view('admin.plans.index', [

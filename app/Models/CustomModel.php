@@ -9,9 +9,9 @@ class CustomModel extends Model
     public function search(string $filter = null, string $field = 'id')
     {
         if (!$filter) {
-            return $this->paginate(1);
+            return $this->paginate();
         }
 
-        return $this->where($field, 'LIKE', '%' . trim($filter) . '%')->paginate(1);
+        return $this->where($field, 'LIKE', '%' . trim($filter) . '%')->paginate();
     }
 }
