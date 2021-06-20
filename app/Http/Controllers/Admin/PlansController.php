@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Plans\CreatePlanRequest;
+use App\Http\Requests\UpdatePlanRequest;
 use App\Models\Plan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,29 +35,58 @@ class PlansController extends Controller
 
     public function create()
     {
-        return view('admin.plans.create');
+        return view('admin.plans.form');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(CreatePlanRequest $request): RedirectResponse
     {
-        $data = $request->all();
-        $data['url'] = Str::kebab($data['name']);
-
-        $this->planRepository->create($data);
+        $this->planRepository->create($request->all());
 
         return redirect()->route('admin.plans.index');
     }
 
     public function show(string $url)
     {
-        $plan = $this->planRepository->where('url', $url)->firstOrFail();
+        $plan = $this->planRepository->where('url', $url)->first();
+
+        if (!$plan) {
+            return redirect()->back();
+        }
 
         return view('admin.plans.show', compact('plan'));
     }
 
+    public function edit(string $url)
+    {
+        $plan = $this->planRepository->where('url', $url)->first();
+
+        if (!$plan) {
+            return redirect()->back();
+        }
+
+        return view('admin.plans.form', compact('plan'));
+    }
+
+    public function update(UpdatePlanRequest $request, string $url): RedirectResponse
+    {
+        $plan = $this->planRepository->where('url', $url)->first();
+
+        if (!$plan) {
+            return redirect()->back();
+        }
+
+        $plan->update($request->all());
+
+        return redirect()->route('admin.plans.index');
+    }
+
     public function destroy(string $url): RedirectResponse
     {
-        $plan = $this->planRepository->where('url', $url)->firstOrFail();
+        $plan = $this->planRepository->where('url', $url)->first();
+
+        if (!$plan) {
+            return redirect()->back();
+        }
 
         $plan->delete();
 
